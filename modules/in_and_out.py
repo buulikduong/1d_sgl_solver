@@ -9,14 +9,14 @@ def read_inp(path):
     Args:
         path: Path to the input file
 
-    Retruns:
+    Returns:
         data: Dictionary containing all parameter from the input file
     """
 
     data = {}
 
     try:
-        with open(path + 'schrodinger.inp', 'r') as fp:
+        fp = open(path + 'schrodinger.inp', 'r')
     except OSError:
         print("Input file can not be read.\nPlease check location and permission rights.")
         sys.exit(1)
