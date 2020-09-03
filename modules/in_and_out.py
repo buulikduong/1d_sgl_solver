@@ -41,3 +41,22 @@ def read_inp(path):
         print("schrodinger.inp do not have the correct format.\nPlease check your input file.")
     print(data)
     return data
+
+def output_storage(potential, energy, w_function, exp_val, sigma_x, xaxis, directory):
+    """Saving potential, eigenvalues, eigenfunctions, expectationvalues, uncertainty into output files
+
+    Args:
+        potential: potential V(x) of the given problem
+        energy: eigenvalues of energies
+        w_function: standardised eigenfunction
+        exp_val: expectation value of x
+        sigma_x: uncertainty of x
+        x_axis: values of x
+        directory: location for saving output file
+    """
+
+    np.savetxt(directory + 'potentialdat', np.transpose(np.array([xaxis, potential(xaxis)]))
+    np.savetxt(directory + 'energies.dat', np.transpose(np.array([energy])))
+    xaxis = np.reshape(xaxis, (len(xaxis), 1))
+    np.savetxt(directory + 'wavefuncs.dat', np.hstack((xaxis, w_functions))
+    np.savetxt(directory + 'expvalues.dat', np.transpose(np.array([exp_val, sigma_x])))
