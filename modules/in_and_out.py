@@ -40,23 +40,26 @@ def read_inp(path):
     except IndexError:
         print("schrodinger.inp do not have the correct format.\nPlease check your input file.")
     print(data)
+    fp.close()
     return data
 
-def output_storage(potential, energy, w_function, exp_val, sigma_x, xaxis, directory):
-    """Saving potential, eigenvalues, eigenfunctions, expectationvalues, uncertainty into output files
+def output_storage(first, last, potential, energy, w_function, exp_val, sigma_x, xaxis, directory):
+    """Storing potential, eigenvalues, eigenfunctions, expectationvalues, uncertainty into output files.
 
     Args:
+        first(int): first eigenvalue to include
+        last(int): last eigenvalue to include
         potential: potential V(x) of the given problem
-        energy: eigenvalues of energies
-        w_function: standardised eigenfunction
-        exp_val: expectation value of x
-        sigma_x: uncertainty of x
-        x_axis: values of x
+        energy(array): eigenvalues of energies
+        w_function(array): standardised eigenfunction
+        exp_val(array): expectation value of x
+        sigma_x(array): uncertainty of x
+        x_axis(array): values of x
         directory: location for saving output file
     """
 
-    np.savetxt(directory + 'potentialdat', np.transpose(np.array([xaxis, potential(xaxis)]))
-    np.savetxt(directory + 'energies.dat', np.transpose(np.array([energy])))
+    np.savetxt(directory + 'potential.dat', np.transpose(np.array([xaxis, potential(xaxis)])))
+    np.savetxt('directory' + 'energies.dat', np.transpose(energy[first - 1:last]))
     xaxis = np.reshape(xaxis, (len(xaxis), 1))
-    np.savetxt(directory + 'wavefuncs.dat', np.hstack((xaxis, w_functions))
-    np.savetxt(directory + 'expvalues.dat', np.transpose(np.array([exp_val, sigma_x])))
+    np.savetxt('directory' + 'wavefuncs.dat', np.hstack((xaxis, w_function)))
+    np.savetxt('directory' + 'expvalues.dat', np.transpose(np.array([exp_val, sigma_x])))
