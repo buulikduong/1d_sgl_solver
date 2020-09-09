@@ -42,7 +42,7 @@ def readplotdata(direc):
 
 
 def plotqm(x_val, potential, eigenfunctions, energies, exp_values, lim_x=None,
-           lim_y=None, eigenmin=0, eigenmax=len(energies), scalfac=1):
+           lim_y=None, eigenmin=0, eigenmax=None, scalfac=1):
     """Function that plots the solution of the 1d QM problem
 
     Args:
@@ -58,6 +58,9 @@ def plotqm(x_val, potential, eigenfunctions, energies, exp_values, lim_x=None,
         scalfac (float): scling factor for better readability of the plot
         fsize (int): fontsize
     """
+    if eigenmax is None:
+        eigenmax = len(energies)
+
     plt.plot(x_val, potential, color="black")
 
     if lim_x is None:
@@ -82,5 +85,33 @@ def plotqm(x_val, potential, eigenfunctions, energies, exp_values, lim_x=None,
     plt.title(r"Potential, eigenstates, $\langle x \rangle$", fontsize=14)
     plt.xlabel("x [Bohr]", fontsize=12)
     plt.ylabel("Energy [Hartree]", fontsize=12)
+
+    return None
+
+
+def plotuncertainty(energies, uncertainties, unclim_x=None, lim_y=None):
+    """function for plotting uncertainty values of a QM problem
+    Args:
+        energies (array): calculated energies of qm problem
+        uncertainties (array): calculated uncertainty for each eigenstate
+        unclim_x (tupel): first and last x-value to plot
+        lim_y (tupel): first and last y-value to plot
+    """
+
+    plt.plot(uncertainties, energies, "+", color="pink", markersize=16, mew=2)
+
+    if unclim_x is None:
+        x_min, x_max = plt.xlim()
+    else:
+        x_min, x_max = unclim_x
+        plt.xlim(unclim_x)
+
+    if lim_y is not None:
+        plt.ylim(lim_y)
+
+    plt.hlines(energies, x_min, x_max, color="grey")
+
+    plt.title(r"$\sigma_x$", fontsize=14)
+    plt.xlabel("[Bohr]", fontsize=12)
 
     return None
