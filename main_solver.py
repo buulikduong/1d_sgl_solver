@@ -15,10 +15,10 @@ def main():
     parser = argparse.ArgumentParser(description=_DESCRIPTION)
     msg = 'Path to input file.'
     parser.add_argument('-i', '--input', type=str,
-                        default='/home/dbuulik/1d_sgl_solver/application_examples/infinite_potential_well/', help=msg)
+                        default='/home/dbuulik/1d_sgl_solver/application_examples/finite_potential_well/', help=msg)
     msg = 'Path to output file'
     parser.add_argument('-o', '--output', type=str,
-                        default='/home/dbuulik/1d_sgl_solver/application_examples/infinite_potential_well/', help=msg)
+                        default='/home/dbuulik/1d_sgl_solver/application_examples/finite_potential_well/', help=msg)
     args = parser.parse_args()
 
     parameter = in_and_out.read_inp(args.input)
@@ -27,23 +27,26 @@ def main():
                                         parameter['y_decl'],
                                         parameter['interpol_method'])
 
+    xpoints = np.linspace(2.0, -2.0, 20)
+    potential = np.array([int_pot(ii) for ii in xpoints])
+
+
     eigenvalue, w_function, x_points = solver.solv(parameter['xMin'],
                                                    parameter['xMax'],
                                                    parameter['nPoint'],
-                                                   parameter['mass'],
-                                                   int_pot)
+                                                   parameter['mass'], int_pot)
 
-    exp_x, unc_x = solver.exp_val(w_function, parameter['xMin'],
-                                  parameter['xMax'],
-                                  parameter['nPoint'])
+    # exp_x, unc_x = solver.exp_val(w_function, parameter['xMin'],
+    #                             parameter['xMax'],
+    #                             parameter['nPoint'])
 
-    in_and_out.output_storage(int_pot, eigenvalue, w_function, exp_x, unc_x,
-                              x_points, args.output)
+    # in_and_out.output_storage(int_pot, eigenvalue, w_function, exp_x, unc_x,
+    #                         x_points, args.output)
 
-
-    print(parameter)
+    # print(parameter)
+    print(len(eigenvalue))
     # print(pot)
-    print(eigenvalue)
+    # print(eigenvalue)
     # print(exp_x)
 
 

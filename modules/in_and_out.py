@@ -46,29 +46,27 @@ def read_inp(path):
     return data
 
 
-def output_storage(first, last, potential, energy, w_function, exp_val, sigma_x, xaxis, directory):
+def output_storage(potential, energy, w_function, exp_val, sigma_x, x_points, directory):
     """
     Storing potential, eigenvalues, eigenfunctions,
     expectationvalues,cuncertainty into output files.
 
     Args:
-        first (int): first eigenvalue to include
-        last (int): last eigenvalue to include
-        potential (list): interpolated potential V(x)
-        energy (array): energy eigenvalues
+        potential (1d-array): interpolated potential V(x)
+        energy (1d-array): energy eigenvalues
         w_function (array): normalized eigenfunctions
         exp_val (array): expectation value of position operator
-        sigma_x (array): position uncertainty
-        x_axis (array): values of x
+        sigma_x (1d-array): position uncertainty
+        x_points (1d-array): coordinates for discretization points
         directory: location for saving output file
     """
 
     np.savetxt(str(directory) + 'potential.dat',
-               np.transpose(np.array([xaxis, potential(xaxis)])))
+               np.transpose(np.array([x_points, potential(x_points)])))
     np.savetxt(str(directory) + 'energies.dat',
-               np.transpose(energy[first - 1:last]))
-    xaxis = np.reshape(xaxis, (len(xaxis), 1))
+               np.transpose(energy))
+    x_points = np.reshape(x_points, (len(x_points), 1))
     np.savetxt(str(directory) + 'wavefuncs.dat',
-               np.hstack((xaxis, w_function[first - 1:last])))
+               np.hstack((x_points, w_function)))
     np.savetxt(str(directory) + 'expvalues.dat',
                np.transpose(np.array([exp_val, sigma_x])))
