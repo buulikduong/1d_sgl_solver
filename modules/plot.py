@@ -150,16 +150,20 @@ def user_inp(isdir):
     """
 
     if isdir is False:
-        msg = """Please input the directory where the plottable
-        data is located: """
+        msg = ("Please input the directory where the plottable\
+data is located: ")
         direc = input(msg)
 
     lim_x = input("Please input the x-axis range as a tuple: ")
     lim_y = input("Please input the y-axis range as a tuple: ")
-    eigenlim = input("Please input the first and last eigenvalue\
-    to  be plotted as a tuple: ")
+
+    msg ="Please input the first and last eigenvalue\
+to  be plotted as a tuple: "
+    eigenlim = input(msg)
+
     msg = "Please input a scaling factor for better visual representation: "
     scalefac = float(input(msg))
+
     msg = "Please input the x-axis range for the uncertainty plot as a tuple: "
     unclim_x = input(msg)
 
