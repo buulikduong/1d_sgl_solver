@@ -20,12 +20,10 @@ def readplotdata(direc):
         uncertainties (array): uncertainty values for every eigenfunction
     """
 
-    dirname = "application_examples/" + direc
-
-    path_en = os.path.join(dirname, "energies.dat")
-    path_pot = os.path.join(dirname, "potential.dat")
-    path_wfuncs = os.path.join(dirname, "wavefuncs.dat")
-    path_expec_val = os.path.join(dirname, "expvalues.dat")
+    path_en = os.path.join(direc, "energies.dat")
+    path_pot = os.path.join(direc, "potential.dat")
+    path_wfuncs = os.path.join(direc, "wavefuncs.dat")
+    path_expec_val = os.path.join(direc, "expvalues.dat")
 
     energies = np.loadtxt(path_en)
     potential = np.loadtxt(path_pot)
@@ -41,8 +39,8 @@ def readplotdata(direc):
     return x_val, potential, eigenfunctions, energies, exp_values, uncertainties
 
 
-def plotqm(x_val, potential, eigenfunctions, energies, exp_values, lim_x=None,
-           lim_y=None, eigenmin=0, eigenmax=None, scalfac=1):
+def _plotqm(x_val, potential, eigenfunctions, energies, exp_values, lim_x=None,
+            lim_y=None, eigenmin=0, eigenmax=None, scalfac=1):
     """Function that plots the solution of the 1d QM problem
 
     Args:
@@ -89,7 +87,7 @@ def plotqm(x_val, potential, eigenfunctions, energies, exp_values, lim_x=None,
     return None
 
 
-def plotuncertainty(energies, uncertainties, unclim_x=None, lim_y=None):
+def _plotuncertainty(energies, uncertainties, unclim_x=None, lim_y=None):
     """function for plotting uncertainty values of a QM problem
     Args:
         energies (array): calculated energies of qm problem
@@ -117,7 +115,7 @@ def plotuncertainty(energies, uncertainties, unclim_x=None, lim_y=None):
     return None
 
 
-def _check_dir():
+def check_dir():
     """function that checks if the plottable data is located in the same folder
     as the main function
 
@@ -138,7 +136,7 @@ def _check_dir():
         return isdir
 
 
-def _user_inp(isdir):
+def user_inp(isdir):
     """function that reads user-inputs, which decide how the plots are gonna
        look like
        Args:
@@ -150,15 +148,16 @@ def _user_inp(isdir):
             eigenmin (int): first eigenvalue to be plotted
             eigenmax (int): last eigenvalue to be plotted
     """
+
     if isdir is False:
         msg = """Please input the directory where the plottable
-                    data is located: """
+        data is located: """
         direc = input(msg)
 
     lim_x = input("Please input the x-axis range as a tuple: ")
     lim_y = input("Please input the y-axis range as a tuple: ")
     eigenlim = input("Please input the first and last eigenvalue\
-                                to  be plotted as a tuple: ")
+    to  be plotted as a tuple: ")
     msg = "Please input a scaling factor for better visual representation: "
     scalefac = float(input(msg))
     msg = "Please input the x-axis range for the uncertainty plot as a tuple: "
@@ -171,3 +170,17 @@ def _user_inp(isdir):
     unclim_x = tuple(float(x) for x in unclim_x.split(","))
 
     return direc, lim_x, lim_y, eigenlim, scalefac, unclim_x
+
+
+def display_plots(x_val, potential, eigenfunctions, energies, expec_val, lim_x,
+                  lim_y, eigenlim, scalefac, uncertainties, unclim_x):
+    plt.figure(figsize=(7, 4.5))
+
+    plt.subplot(1, 2, 1)
+    _plotqm(x_val, potential, eigenfunctions, energies, expec_val,
+            lim_x, lim_y, eigenlim[0], eigenlim[1], scalefac)
+
+    plt.subplot(1, 2, 2)
+    _plotuncertainty(energies, uncertainties, unclim_x, lim_y)
+    plt.show()
+    return
