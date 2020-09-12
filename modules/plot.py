@@ -115,3 +115,59 @@ def plotuncertainty(energies, uncertainties, unclim_x=None, lim_y=None):
     plt.xlabel("[Bohr]", fontsize=12)
 
     return None
+
+
+def _check_dir():
+    """function that checks if the plottable data is located in the same folder
+    as the main function
+
+    Returns:
+        isdir (bool): is plottable data in default directory
+    """
+
+    try:
+        fp = open("potential.dat", "r")
+    except FileNotFoundError:
+        msg = "Plottable data not found or incomplete in default directory."
+        print(msg)
+        isdir = False
+        return isdir
+    else:
+        fp.close()
+        isdir = True
+        return isdir
+
+
+def _user_inp(isdir):
+    """function that reads user-inputs, which decide how the plots are gonna
+       look like
+       Args:
+           isdir (bool): is plottable data in default directory
+        Returns:
+            direc (string): path where the data to be plotted is located
+            lim_x (tuple): x-axis-range
+            lim_y (tuple): y-axis-range
+            eigenmin (int): first eigenvalue to be plotted
+            eigenmax (int): last eigenvalue to be plotted
+    """
+    if isdir is False:
+        msg = """Please input the directory where the plottable
+                    data is located: """
+        direc = input(msg)
+
+    lim_x = input("Please input the x-axis range as a tuple: ")
+    lim_y = input("Please input the y-axis range as a tuple: ")
+    eigenlim = input("Please input the first and last eigenvalue\
+                                to  be plotted as a tuple: ")
+    msg = "Please input a scaling factor for better visual representation: "
+    scalefac = float(input(msg))
+    msg = "Please input the x-axis range for the uncertainty plot as a tuple: "
+    unclim_x = input(msg)
+
+    # converting strings into tuples
+    lim_x = tuple(float(x) for x in lim_x.split(","))
+    lim_y = tuple(float(x) for x in lim_y.split(","))
+    eigenlim = tuple(int(x) for x in eigenlim.split(","))
+    unclim_x = tuple(float(x) for x in unclim_x.split(","))
+
+    return direc, lim_x, lim_y, eigenlim, scalefac, unclim_x
