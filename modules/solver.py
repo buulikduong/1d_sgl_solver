@@ -70,7 +70,7 @@ def exp_val(w_function, xmin, xmax, npoint):
     exp_x = np.ones(len(w_function[0]))
     exp_x_sqrt = np.ones(len(w_function[0]))
 
-    for ii in range(0, np.len(w_function[0])):
+    for ii in range(0, len(w_function[0])):
         exp_x[ii] = delta * np.sum(w_function[:, ii] * x_i * w_function[:, ii])
         exp_x_sqrt[ii] = delta * np.sum(w_function[:, ii]**2 * x_i**2)
 

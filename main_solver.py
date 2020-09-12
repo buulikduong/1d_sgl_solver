@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """Executable script for solving stationary schrodinger equation"""
 
-import numpy as np
 import argparse
 from modules import in_and_out, interpolator, solver
 
@@ -27,27 +26,17 @@ def main():
                                         parameter['y_decl'],
                                         parameter['interpol_method'])
 
-    xpoints = np.linspace(2.0, -2.0, 20)
-    potential = np.array([int_pot(ii) for ii in xpoints])
-
-
     eigenvalue, w_function, x_points = solver.solv(parameter['xMin'],
                                                    parameter['xMax'],
                                                    parameter['nPoint'],
                                                    parameter['mass'], int_pot)
 
-    # exp_x, unc_x = solver.exp_val(w_function, parameter['xMin'],
-    #                             parameter['xMax'],
-    #                             parameter['nPoint'])
+    exp_x, unc_x = solver.exp_val(w_function, parameter['xMin'],
+                                  parameter['xMax'],
+                                  parameter['nPoint'])
 
-    # in_and_out.output_storage(int_pot, eigenvalue, w_function, exp_x, unc_x,
-    #                         x_points, args.output)
-
-    # print(parameter)
-    print(len(eigenvalue))
-    # print(pot)
-    # print(eigenvalue)
-    # print(exp_x)
+    in_and_out.output_storage(int_pot, eigenvalue, w_function, exp_x, unc_x,
+                              x_points, args.output)
 
 
 if __name__ == '__main__':
