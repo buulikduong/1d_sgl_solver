@@ -17,7 +17,7 @@ def solv(xmin, xmax, npoint, mass, potential):
         xmin (float): left value on x-axis
         xmax (float): right value on x-axis
         npoint (int): number of discretization points for x-axis
-        potential (1d-array): interpolated potentials
+        potential (function): interpolated function
         mass (float): particle mass
 
     Returns:
@@ -26,15 +26,11 @@ def solv(xmin, xmax, npoint, mass, potential):
         x_points (1d-array): coordinates for discretization points
     """
     # creating true symmetric tridiagonal matrix
-    x_points = np.linspace(xmax, xmin, npoint)
-    delta = x_points[1] - x_points[0]
-
-    diagonal_main = [1/(mass*delta**2) + potential(ii) for ii in x_points]
-
+    x_points = np.linspace(xmin, xmax, npoint)
+    delta = np.abs(x_points[1] - x_points[0])
+    diagonal_main = np.array([1/(mass*delta**2) + potential(ii) for ii in x_points])
     diagonal_sub = -1/(2*mass*delta**2)*np.ones(npoint)
-
     diags = np.array([diagonal_main, diagonal_sub, diagonal_sub])
-    # dimension = diags.ndim
     positions = np.array([0, -1, 1])
     tridiagonal = sparse.spdiags(diags, positions, npoint, npoint).toarray()
 
@@ -44,8 +40,8 @@ def solv(xmin, xmax, npoint, mass, potential):
     # normalizing eigenvectors
     w_function = np.ones(eigenvector.shape)
     for ii in range(0, len(eigenvector[0])):
-       norm_factor = 1/np.sqrt(sum(eigenvector[:, ii]**2))
-       w_function[:, ii] = np.array([norm_factor*eigenvector[:, ii]])
+        norm_factor = 1/np.sqrt(sum(np.abs(eigenvector[:, ii])**2)*delta)
+        w_function[:, ii] = np.array([norm_factor*eigenvector[:, ii]])
 
     return eigen_val, w_function, x_points
 
@@ -64,8 +60,7 @@ def exp_val(w_function, xmin, xmax, npoint):
             exp_x (array): expectation values
             unc_x (array): position uncertainty
     """
-
-    delta = (xmax - xmin)/(npoint - 1)
+    delta = (xmax - xmin) / (npoint-1)
     x_i = np.linspace(xmin, xmax, npoint)
     exp_x = np.ones(len(w_function[0]))
     exp_x_sqrt = np.ones(len(w_function[0]))

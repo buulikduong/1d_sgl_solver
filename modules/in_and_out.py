@@ -46,12 +46,14 @@ def read_inp(path):
     return data
 
 
-def output_storage(potential, energy, w_function, exp_val, sigma_x, x_points, directory):
+def output_storage(first, last, potential, energy, w_function, exp_val, sigma_x, x_points, directory):
     """
     Storing potential, eigenvalues, eigenfunctions,
     expectationvalues,cuncertainty into output files.
 
     Args:
+        first (float): first eigenvalue to include
+        last (float): last eigenvalue to include
         potential (1d-array): interpolated potential V(x)
         energy (1d-array): energy eigenvalues
         w_function (array): normalized eigenfunctions
@@ -64,9 +66,9 @@ def output_storage(potential, energy, w_function, exp_val, sigma_x, x_points, di
     np.savetxt(str(directory) + 'potential.dat',
                np.transpose(np.array([x_points, potential(x_points)])))
     np.savetxt(str(directory) + 'energies.dat',
-               np.transpose(energy))
+               np.transpose(energy[first-1:last]))
     x_points = np.reshape(x_points, (len(x_points), 1))
     np.savetxt(str(directory) + 'wavefuncs.dat',
                np.hstack((x_points, w_function)))
     np.savetxt(str(directory) + 'expvalues.dat',
-               np.transpose(np.array([exp_val, sigma_x])))
+               np.transpose(np.array([exp_val[first-1:last], sigma_x[first-1:last]])))

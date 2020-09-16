@@ -72,9 +72,9 @@ def _plotqm(x_val, potential, eigenfunctions, energies, exp_values, lim_x=None,
 
     for ii in range(eigenmin - 1, eigenmax):
         if ii % 2:
-            color = "blue"
-        if not ii % 2:
             color = "red"
+        if not ii % 2:
+            color = "blue"
 
         plt.plot(x_val, scalfac * eigenfunctions[:, ii] + energies[ii], color)
         plt.hlines(energies[ii], x_min, x_max, color="grey")
