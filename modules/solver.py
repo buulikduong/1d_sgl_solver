@@ -22,14 +22,14 @@ def solv(xmin, xmax, npoint, mass, potential):
 
     Returns:
         eigen_val ((M,)array): eigenvalue of the given problem
-        w_function ((M, M)array): corresponding nomalized wavefunction
+        eigenvector ((M, M)array): corresponding eigenvectors
         x_points (1d-array): coordinates for discretization points
     """
     # creating true symmetric tridiagonal matrix
     x_points = np.linspace(xmin, xmax, npoint)
     delta = np.abs(x_points[1] - x_points[0])
     diagonal_main = np.array([1/(mass*delta**2) + potential(ii) for ii in x_points])
-    diagonal_sub = -1/(2*mass*delta**2)*np.ones(npoint)
+    diagonal_sub = -1/(2*mass*delta**2)*np.ones(npoint, dtype=float)
     diags = np.array([diagonal_main, diagonal_sub, diagonal_sub])
     positions = np.array([0, -1, 1])
     tridiagonal = sparse.spdiags(diags, positions, npoint, npoint).toarray()
@@ -37,13 +37,30 @@ def solv(xmin, xmax, npoint, mass, potential):
     # solving tridiagonal matrix
     eigen_val, eigenvector = linalg.eigh(tridiagonal, eigvals_only=False)
 
-    # normalizing eigenvectors
-    w_function = np.ones(eigenvector.shape)
+    return eigen_val, eigenvector, x_points
+
+
+def norm(eigenvector, xmin, xmax, npoint):
+    """
+    Routine for normalizing the eigenvectors of the given qm problem.
+
+    Args:
+        eigenvector (array): eigenvectors of the given qm problem
+        xmin (float): left value on x-axis
+        xmax (float): right value on x-axis
+        npoint (int): number of discretization points for x-axis
+
+    Returns:
+        w_function (array): corresponding normalized wavefunctions
+    """
+    x_points = np.linspace(xmin, xmax, npoint)
+    delta = np.abs(x_points[1] - x_points[0])
+    w_function = np.ones(eigenvector.shape, dtype=float)
     for ii in range(0, len(eigenvector[0])):
         norm_factor = 1/np.sqrt(sum(np.abs(eigenvector[:, ii])**2)*delta)
         w_function[:, ii] = np.array([norm_factor*eigenvector[:, ii]])
 
-    return eigen_val, w_function, x_points
+    return w_function
 
 
 def exp_val(w_function, xmin, xmax, npoint):

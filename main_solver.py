@@ -14,10 +14,10 @@ def main():
     parser = argparse.ArgumentParser(description=_DESCRIPTION)
     msg = 'Path to input file.'
     parser.add_argument('-i', '--input', type=str,
-                        default='./application_examples/infinite_potential_well/', help=msg)
+                        default='./application_examples/finite_potential_well/', help=msg)
     msg = 'Path to output file'
     parser.add_argument('-o', '--output', type=str,
-                        default='./application_examples/infinite_potential_well/', help=msg)
+                        default='./application_examples/finite_potential_well/', help=msg)
     args = parser.parse_args()
 
     parameter = in_and_out.read_inp(args.input)
@@ -26,10 +26,14 @@ def main():
                                         parameter['y_decl'],
                                         parameter['interpol_method'])
 
-    eigenvalue, w_function, x_points = solver.solv(parameter['xMin'],
-                                                   parameter['xMax'],
-                                                   parameter['nPoint'],
-                                                   parameter['mass'], int_pot)
+    eigenvalue, eigenvector, x_points = solver.solv(parameter['xMin'],
+                                                    parameter['xMax'],
+                                                    parameter['nPoint'],
+                                                    parameter['mass'], int_pot)
+
+    w_function = solver.norm(eigenvector, parameter['xMin'],
+                             parameter['xMax'],
+                             parameter['nPoint'])
 
     exp_x, unc_x = solver.exp_val(w_function, parameter['xMin'],
                                   parameter['xMax'],
