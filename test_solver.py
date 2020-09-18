@@ -18,7 +18,8 @@ EXAMPLES = ['infinite_potential_well', 'finite_potential_well',
 @pytest.mark.parametrize("example", EXAMPLES)
 def test_potential(example):
     """
-    Tests if computet potentials match the reference potentials.
+    Tests if computet potentials match the reference potentials. It is required
+    that input file schrodinger.inp is in same directory as the reference file.
     """
     path = "./application_examples/{}/".format(example)
     ref_potential = np.loadtxt(path + "potential.ref")
@@ -36,14 +37,19 @@ def test_potential(example):
 @pytest.mark.parametrize("example", EXAMPLES)
 def test_energy(example):
     """
-    Tests if computet energys match the reference energy eigenvalues.
+    Tests if computet energys match the reference energy eigenvalues. It is
+    required that input file schrodinger.inp is in same directory as the
+    reference file.
     """
     path = "./application_examples/{}/".format(example)
     ref_energy = np.loadtxt(path + "energy.ref")
-    energy_test = np.loadtxt(path + "energies.dat")
-    if example[0] == 'infinite_potential_well':
-        assert np.allclose(ref_energy, test_energy, rtol=1e-02, atol=1e-12)
-    elif example[0] == 'harmonic_potential_well':
-        assert np.allclose(ref_energy, energy_test, rtol=1e-03, atol=1e-12)
-    else:
-        assert np.allclose(ref_energy, energy_test)
+    parameter = modules.in_and_out.read_inp(path)
+    intfunc = modules.interpolator.interpolator(parameter['x_decl'],
+                                                parameter['y_decl'],
+                                                parameter['interpol_method'])
+    energy_test = modules.solver.solv(parameter['xMin'],
+                                      parameter['xMax'],
+                                      parameter['nPoint'],
+                                      parameter['mass'],
+                                      intfunc)[0][parameter['first']-1:parameter['last']]
+    np.allclose(ref_energy, energy_test)
