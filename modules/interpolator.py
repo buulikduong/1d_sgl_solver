@@ -1,11 +1,10 @@
-"""Module/Routine interpolating matematical functions out of support points"""
+"""Module interpolating mathematical functions out of support points"""
 
 from scipy.interpolate import interp1d, lagrange, CubicSpline
 
 
 def interpolator(x_sup, y_sup, method):
-    """
-    intfunction used to interpolate a mathematical function from a given set of
+    """Interpolates a mathematical function from a given set of
     points using either linear, polynomial or cubic spline for the
     interpolation.
 
