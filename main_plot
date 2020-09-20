@@ -1,0 +1,20 @@
+#!/usr/bin/env python3
+"""Main program for plotting the calculated data"""
+
+
+from modules import plot
+
+
+def main():
+    """Main function for plotting the calculated data."""
+
+    direc, lim_x, lim_y, eigenlim, scalefac, unclim_x = plot.user_inp()
+    x_val, potential, eigenfunctions, energies, expec_val, uncertainties = plot.readplotdata(direc)
+
+    plot.display_subplots(x_val, potential, eigenfunctions, energies,
+                          expec_val, lim_x, lim_y, eigenlim, scalefac,
+                          uncertainties, unclim_x)
+
+
+if __name__ == "__main__":
+    main()
