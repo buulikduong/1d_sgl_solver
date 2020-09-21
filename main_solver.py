@@ -8,16 +8,13 @@ _DESCRIPTION = "Solving schrodinger equation for a given potential."
 
 
 def main():
-    """
-    Main routine for solving schrodinger equation
-    """
+    """ Main function for solving schrodinger equation."""
+
     parser = argparse.ArgumentParser(description=_DESCRIPTION)
-    msg = 'Path to input file.'
-    parser.add_argument('-i', '--input', type=str,
-                        default='./application_examples/finite_potential_well/', help=msg)
-    msg = 'Path to output file'
-    parser.add_argument('-o', '--output', type=str,
-                        default='./application_examples/finite_potential_well/', help=msg)
+    msg = 'Path to input file (default: .)'
+    parser.add_argument('-i', '--input', type=str, default='.', help=msg)
+    msg = 'Path to output file (default: .)'
+    parser.add_argument('-o', '--output', type=str, default='.', help=msg)
     args = parser.parse_args()
 
     parameter = in_and_out.read_inp(args.input)
@@ -32,16 +29,14 @@ def main():
                                                     parameter['mass'], int_pot)
 
     w_function = solver.norm(eigenvector, parameter['xMin'],
-                             parameter['xMax'],
-                             parameter['nPoint'])
+                             parameter['xMax'], parameter['nPoint'])
 
     exp_x, unc_x = solver.exp_val(w_function, parameter['xMin'],
-                                  parameter['xMax'],
-                                  parameter['nPoint'])
+                                  parameter['xMax'], parameter['nPoint'])
 
     in_and_out.output_storage(parameter['first'], parameter['last'],
-                              int_pot, eigenvalue, w_function, exp_x, unc_x,
-                              x_points, args.output)
+                              int_pot, eigenvalue, w_function, exp_x,
+                              unc_x, x_points, args.output)
 
 
 if __name__ == '__main__':

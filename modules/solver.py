@@ -1,6 +1,7 @@
 """
-Module for solving 1 dimensional stationary Schrodinger equation,
-calculating expectation values of operator x and corresponding uncertainty.
+Module containing functions for solving the 1 dimensional stationary
+Schrodinger equation and calculating expectation values of operator x
+and corresponding uncertainties.
 """
 
 import numpy as np
@@ -11,7 +12,7 @@ from scipy import sparse
 def solv(xmin, xmax, npoint, mass, potential):
     """
     Routine for solving stationary Schroedinger equation
-    in tridiagonal maxtrix form.
+    in tridiagonal maxtrix form for a given potential.
 
     Args:
         xmin (float): left value on x-axis
@@ -22,7 +23,7 @@ def solv(xmin, xmax, npoint, mass, potential):
 
     Returns:
         eigen_val ((M,)array): eigenvalue of the given problem
-        eigenvector ((M, M)array): corresponding eigenvectors
+        eigen_vec ((M, M)array): corresponding eigenvectors
         x_points (1d-array): coordinates for discretization points
     """
     # creating true symmetric tridiagonal matrix
@@ -35,56 +36,57 @@ def solv(xmin, xmax, npoint, mass, potential):
     tridiagonal = sparse.spdiags(diags, positions, npoint, npoint).toarray()
 
     # solving tridiagonal matrix
-    eigen_val, eigenvector = linalg.eigh(tridiagonal, eigvals_only=False)
+    eigen_val, eigen_vec = linalg.eigh(tridiagonal)
 
-    return eigen_val, eigenvector, x_points
+    return eigen_val, eigen_vec, x_points
 
 
-def norm(eigenvector, xmin, xmax, npoint):
+def norm(eigenvectors, xmin, xmax, npoint):
     """
     Routine for normalizing the eigenvectors of the given qm problem.
 
     Args:
-        eigenvector (array): eigenvectors of the given qm problem
+        eigenvectors (array): eigenvectors of the given qm problem
         xmin (float): left value on x-axis
         xmax (float): right value on x-axis
         npoint (int): number of discretization points for x-axis
 
     Returns:
-        w_function (array): corresponding normalized wavefunctions
+        w_func (array): corresponding normalized wavefunctions
     """
     x_points = np.linspace(xmin, xmax, npoint)
     delta = np.abs(x_points[1] - x_points[0])
-    w_function = np.ones(eigenvector.shape, dtype=float)
-    for ii in range(0, len(eigenvector[0])):
-        norm_factor = 1/np.sqrt(sum(np.abs(eigenvector[:, ii])**2)*delta)
-        w_function[:, ii] = np.array([norm_factor*eigenvector[:, ii]])
+    w_func = np.ones(eigenvectors.shape, dtype=float)
+    for ii in range(0, len(eigenvectors[0])):
+        norm_factor = 1/np.sqrt(sum(np.abs(eigenvectors[:, ii])**2)*delta)
+        w_func[:, ii] = np.array([norm_factor*eigenvectors[:, ii]])
 
-    return w_function
+    return w_func
 
 
-def exp_val(w_function, xmin, xmax, npoint):
+def exp_val(w_func, xmin, xmax, npoint):
     """
-    Routine for calculating expectation values and uncertainty of x.
+    Routine for calculating expectation values :math:`\Delta x` and
+    position uncertainty :math:`\sigma`.
 
         Args:
-            w_function (array): normalized eigenvectors
+            w_func (array): normalized eigenvectors
             xmin (float): left value on x-axis
             xmax (float): right value on x-axis
             npoint (int): number of discretization points for x-axis
 
         Returns:
-            exp_x (array): expectation values
-            unc_x (array): position uncertainty
+            exp_x (1d-array): expectation values
+            unc_x (1d-array): position uncertainty
     """
-    delta = (xmax - xmin) / (npoint-1)
-    x_i = np.linspace(xmin, xmax, npoint)
-    exp_x = np.ones(len(w_function[0]))
-    exp_x_sqrt = np.ones(len(w_function[0]))
+    x_points = np.linspace(xmin, xmax, npoint)
+    delta = np.abs(x_points[1] - x_points[0])
+    exp_x = np.ones(len(w_func[0]))
+    exp_x_sqrt = np.ones(len(w_func[0]))
 
-    for ii in range(0, len(w_function[0])):
-        exp_x[ii] = delta * np.sum(w_function[:, ii] * x_i * w_function[:, ii])
-        exp_x_sqrt[ii] = delta * np.sum(w_function[:, ii]**2 * x_i**2)
+    for ii in range(0, len(w_func[0])):
+        exp_x[ii] = delta * np.sum(w_func[:, ii] * x_points * w_func[:, ii])
+        exp_x_sqrt[ii] = delta * np.sum(w_func[:, ii]**2 * x_points**2)
 
     unc_x = np.sqrt(exp_x_sqrt - exp_x**2)
 

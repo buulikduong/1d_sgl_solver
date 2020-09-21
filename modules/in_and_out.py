@@ -1,24 +1,27 @@
-"""Module for reading input data and saving output data."""
+"""Module containing functions for reading input data and saving output data"""
 
+import os.path
 import sys
 import numpy as np
 
 
 def read_inp(path):
     """
-    Reading an input file schrodinger.inp.
+    Reads an input file called "schrodinger.inp"
 
     Args:
-        path: path to the input file
+        path (string): path to the input file
 
     Returns:
-        data: dictionary containing all parameter from the input file
+        data (dictionary): all parameter from the input file. Parameters are:
+        mass, xMin, xMax, nPoint, first, last, interpol_method, interpol_num,
+        x_decl and y_decl
     """
 
     data = {}
 
     try:
-        fp = open(path + 'schrodinger.inp', 'r')
+        fp = open(os.path.join(path, 'schrodinger.inp'), 'r')
     except OSError:
         print("Input file can not be read.")
         print("Please check location and permission rights.")
@@ -46,29 +49,29 @@ def read_inp(path):
     return data
 
 
-def output_storage(first, last, potential, energy, w_function, exp_val, sigma_x, x_points, directory):
+def output_storage(first, last, potential, energy, w_func, exp_x, unc_x, x_points, directory):
     """
-    Storing potential, eigenvalues, eigenfunctions,
-    expectationvalues,cuncertainty into output files.
+    Stores potential, eigenvalues, eigenfunctions,
+    expectationvalues, uncertainties into output files.
 
     Args:
         first (float): first eigenvalue to include
         last (float): last eigenvalue to include
         potential (1d-array): interpolated potential V(x)
         energy (1d-array): energy eigenvalues
-        w_function (array): normalized eigenfunctions
-        exp_val (array): expectation value of position operator
-        sigma_x (1d-array): position uncertainty
+        w_func (array): normalized eigenfunctions
+        exp_x (array): expectation value of position operator
+        unc_x (1d-array): position uncertainty
         x_points (1d-array): coordinates for discretization points
-        directory: location for saving output file
+        directory (string): location for saving output file
     """
 
-    np.savetxt(str(directory) + 'potential.dat',
+    np.savetxt(os.path.join(directory, 'potential.dat'),
                np.transpose(np.array([x_points, potential(x_points)])))
-    np.savetxt(str(directory) + 'energies.dat',
+    np.savetxt(os.path.join(directory, 'energies.dat'),
                np.transpose(energy[first-1:last]))
     x_points = np.reshape(x_points, (len(x_points), 1))
-    np.savetxt(str(directory) + 'wavefuncs.dat',
-               np.hstack((x_points, w_function)))
-    np.savetxt(str(directory) + 'expvalues.dat',
-               np.transpose(np.array([exp_val[first-1:last], sigma_x[first-1:last]])))
+    np.savetxt(os.path.join(directory, 'wavefuncs.dat'),
+               np.hstack((x_points, w_func)))
+    np.savetxt(os.path.join(directory, 'expvalues.dat'),
+               np.transpose(np.array([exp_x[first-1:last], unc_x[first-1:last]])))
