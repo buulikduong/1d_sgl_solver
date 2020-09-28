@@ -35,15 +35,35 @@ please enter following line into your unix shell:
 python3 main_solver.py -h
 ```
 
-For visualizing the saved output data, please execute the script `main_plot.py`
-either in your unix shell or in your IDE (for example Spyder).
+For visualizing the saved output data, please execute the script `main_plot`
+either in your unix shell or in your IDE (for example Spyder).\n
+Some plot-parameters can be set by the user, for example:
+
+```bash
+Please input the range of the x-axis as a tuple:
+```
+
+A valid answer/input should be entered in the form:
+
+```bash
+-2, 2
+```
+
+If default-settings are prefered, just press ENTER without any inputs.\n
 The plots will be shown on screen and then can be saved manually by the user
 in a prefered file format (f.e. as a PDF or PNG).
 
 ## Modules
 
 To get information of the modules containing the main functionality
-of this solver, please read the API documentation.
+of this solver, please read the API documentation. Access to the API
+documentation can be obtained by:
+
+* i)    Switch to the directory `1d_sgl_solver/docs`
+* ii)   Enter `make html`
+* iii)  Enter `firefox _build/html/index.html`
+
+Note: If you do not use firefox, other browsers work as well.
 
 ## Authors/Contact
 

@@ -19,7 +19,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('../modules'))
 
 
 # -- General configuration ------------------------------------------------
@@ -32,9 +32,8 @@ sys.path.insert(0, os.path.abspath('.'))
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.napoleon',
-    ]
+              'sphinx.ext.mathjax',
+              'sphinx.ext.napoleon']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
