@@ -14,6 +14,8 @@ EXAMPLES = ['infinite_potential_well', 'finite_potential_well',
             'double_linear', 'harmonic_potential_well', 'double_cubic_spline',
             'asym_potential_well']
 
+_TOLERANCE = 1e-15
+
 
 @pytest.mark.parametrize("example", EXAMPLES)
 def test_potential(example):
@@ -31,13 +33,13 @@ def test_potential(example):
                            parameter['xMax'],
                            parameter['nPoint'])
     potential_test = [intfunc(ii) for ii in x_points]
-    assert np.all(ref_potential - potential_test < 1e-15)
+    assert np.all(ref_potential - potential_test < _TOLERANCE)
 
 
 @pytest.mark.parametrize("example", EXAMPLES)
 def test_energy(example):
     """
-    Tests if computet energys match the reference energy eigenvalues. It is
+    Tests if computed energies match the reference energy eigenvalues. It is
     required that input file schrodinger.inp is in same directory as the
     reference file.
     """

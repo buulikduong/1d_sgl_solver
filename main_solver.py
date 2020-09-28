@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Executable script for solving stationary schrodinger equation"""
 
 import argparse

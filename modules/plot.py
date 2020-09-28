@@ -41,7 +41,7 @@ def readplotdata(direc):
 
 
 def plotqm(x_val, potential, eigenfunctions, energies, exp_values, lim_x=None,
-           lim_y=None, eigenmin=1, eigenmax=None, scalfac=1, extraspace=1):
+           lim_y=None, eigenmin=1, eigenmax=None, scalfac=1, pref_space=1):
     """Plots the eigenfunctions, eigenenergies and expected
     values of a 1d qm problem.
 
@@ -56,7 +56,8 @@ def plotqm(x_val, potential, eigenfunctions, energies, exp_values, lim_x=None,
         eigenmin (int): first eigenstate to plot.
         eigenmax (int): last eigenstate to plot.
         scalfac (float): scaling factor for better readability of the plot.
-        extraspace (int): addional space between eigenfunctions and ordinate axis.
+        pref_space (int): answer (1 for yes, 0 for no) if additional space \
+        between eigenfunctions and ordinate axes is prefered.
     """
     if eigenmax is None:
         eigenmax = len(energies)
@@ -65,24 +66,37 @@ def plotqm(x_val, potential, eigenfunctions, energies, exp_values, lim_x=None,
 
     # adjusting x and y axis
     if lim_x is None:
-        space = np.abs(np.amax(x_val) * 0.05 * extraspace)
-        x_min = np.amin(x_val) - space
-        x_max = np.amax(x_val) + space
+        extraspace = np.abs(np.amax(x_val) * 0.05 * pref_space)
+        x_min = np.amin(x_val) - extraspace
+        x_max = np.amax(x_val) + extraspace
         lim_x = (x_min, x_max)
         plt.xlim(lim_x)
     else:
         xmin, xmax = lim_x
-        space = np.abs(xmax * 0.05 * extraspace)
-        xmin = np.abs(xmin) - space
-        xmax = np.abs(xmax) + space
-        lim_x_extra_space = (xmin, xmax)
-        plt.xlim(lim_x_extra_space)
+        extraspace = np.abs(xmax * 0.05 * pref_space)
+        xmin = np.abs(xmin) - extraspace
+        xmax = np.abs(xmax) + extraspace
+        lim_x = (xmin, xmax)
+        plt.xlim(lim_x)
 
     if lim_y is None:
+        # y_min(default) for setting the y-axis will be calculated by the potential
+        # minimum and an additional factor to create a small space between the
+        # potential and the x-axis.
+        # This space will be very small or will not exist, when the potential
+        # minimum is close or equal to 0. For this exception a fixed value -0.1
+        # is set for y_min (default).
         if np.abs(np.amin(potential)) < 0.05:
             y_min = -0.1
         else:
             y_min = np.amin(potential) * 1.1
+        # y_max (default) for setting the y-axis will be calculated by the
+        # last eigenvalue to plot and the maximal value of the corresponding
+        # wavefunction. An additional factor (here: 1.05) is used to create
+        # a small space between the last wavefunction to plot and the upper
+        # axis of the plot. This space will be very small, when the last
+        # eigenvalue to plot is close to zero. For this exception a higher
+        # factor (here: 2.50) is used instead.
         if np.abs(energies[-1]) < 0.2:
             y_max = energies[-1] * 2.5 + (np.amax(eigenfunctions[:, eigenmax])) * scalfac
         else:
@@ -206,14 +220,17 @@ data is located: ")
         answer = input("Do you prefer extra space between wavefunctions\n\
 and left and right ordinate axis? [y/n]")
         if answer == "y":
-            extraspace = 1
+            pref_space = 1
         elif answer == "n":
-            extraspace = 0
+            pref_space = 0
         else:
             print("Please enter y or n.")
 
-    print(">>> For the following plot settings, press ENTER without \
-any inputs\nto use default settings <<<")
+    print(">>> For the following plot settings, press ENTER\nwithout \
+any inputs to use default settings <<<")
+
+    print(">>> An invalid input will also lead into the use\n\
+of default settings <<<")
 
     lim_x = input("Please input the x-axis range as a tuple\n\
 (DEFAULT: xMin, xMax of schrodinger.inp): ")
@@ -237,6 +254,9 @@ plotted as a tuple\n(DEFAULT: first, last of schrodinger.inp): "
     unclim_x = input(msg)
 
     # converting strings into tuples
+    # Inputting nothing or an invalid answer (f.e. -1.1 instead of -1,1, when
+    # a tuple is demanded) will cause a ValueError. By using exceptions, this
+    # function is returning 'None' for the corresponding parameter.
     try:
         lim_x = tuple(float(x) for x in lim_x.split(","))
     except ValueError:
@@ -257,7 +277,7 @@ plotted as a tuple\n(DEFAULT: first, last of schrodinger.inp): "
     except ValueError:
         unclim_x = None
 
-    return direc, lim_x, lim_y, eigenlim, scalefac, unclim_x, extraspace
+    return direc, lim_x, lim_y, eigenlim, scalefac, unclim_x, pref_space
 
 
 def display_subplots(x_val, potential, eigenfunctions, energies, expec_val,
