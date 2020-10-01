@@ -1,6 +1,7 @@
 """
-Module for calculating analytic solution of potential and eigenvalues
-for the infinite and finite potential well and for the harmonic osciallator.
+Module containing functions for calculating analytic solution of potential and
+eigenvalues for the infinite and finite potential well and for the harmonic
+oscillator.
 """
 
 import os.path

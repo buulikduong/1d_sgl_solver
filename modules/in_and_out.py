@@ -10,7 +10,7 @@ def read_inp(path):
     Reads an input file called "schrodinger.inp"
 
     Args:
-        path (string): path to the input file
+        path (string): path to the input file.
 
     Returns:
         data (dictionary): all parameter from the input file. Parameters are:
@@ -43,9 +43,11 @@ def read_inp(path):
         lines = np.loadtxt(fp.readlines()[0:])
         data['x_decl'] = lines[:, 0]
         data['y_decl'] = lines[:, 1]
+        fp.close()
     except IndexError:
         print("schrodinger.inp do not have the correct format.")
         print("Please check your input file.")
+        sys.exit(1)
     return data
 
 

@@ -15,11 +15,11 @@ def solv(xmin, xmax, npoint, mass, potential):
     in tridiagonal maxtrix form for a given potential.
 
     Args:
-        xmin (float): left value on x-axis
-        xmax (float): right value on x-axis
-        npoint (int): number of discretization points for x-axis
-        potential (function): interpolated function
-        mass (float): particle mass
+        xmin (float): left value on x-axis.
+        xmax (float): right value on x-axis.
+        npoint (int): number of discretization points for x-axis.
+        potential (function): interpolated function.
+        mass (float): particle mass.
 
     Returns:
         eigen_val ((M,)array): eigenvalue of the given problem
@@ -46,10 +46,10 @@ def norm(eigenvectors, xmin, xmax, npoint):
     Routine for normalizing the eigenvectors of the given qm problem.
 
     Args:
-        eigenvectors (array): eigenvectors of the given qm problem
-        xmin (float): left value on x-axis
-        xmax (float): right value on x-axis
-        npoint (int): number of discretization points for x-axis
+        eigenvectors (array): eigenvectors of the given qm problem.
+        xmin (float): left value on x-axis.
+        xmax (float): right value on x-axis.
+        npoint (int): number of discretization points for x-axis.
 
     Returns:
         w_func (array): corresponding normalized wavefunctions
@@ -70,10 +70,10 @@ def exp_val(w_func, xmin, xmax, npoint):
     position uncertainty :math:`\sigma`.
 
         Args:
-            w_func (array): normalized eigenvectors
-            xmin (float): left value on x-axis
-            xmax (float): right value on x-axis
-            npoint (int): number of discretization points for x-axis
+            w_func (array): normalized eigenvectors.
+            xmin (float): left value on x-axis.
+            xmax (float): right value on x-axis.
+            npoint (int): number of discretization points for x-axis.
 
         Returns:
             exp_x (1d-array): expectation values

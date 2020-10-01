@@ -21,7 +21,8 @@ _TOLERANCE = 1e-15
 def test_potential(example):
     """
     Tests if computet potentials match the reference potentials. It is required
-    that input file schrodinger.inp is in same directory as the reference file.
+    that input file schrodinger.inp is in same directory as the reference file
+    (Here: application_examples).
     """
     path = "./application_examples/{}/".format(example)
     ref_potential = np.loadtxt(path + "potential.ref")
@@ -32,8 +33,8 @@ def test_potential(example):
     x_points = np.linspace(parameter['xMin'],
                            parameter['xMax'],
                            parameter['nPoint'])
-    potential_test = [intfunc(ii) for ii in x_points]
-    assert np.all(ref_potential - potential_test < _TOLERANCE)
+    comp_potential = [intfunc(ii) for ii in x_points]
+    assert np.all(ref_potential - comp_potential < _TOLERANCE)
 
 
 @pytest.mark.parametrize("example", EXAMPLES)
@@ -41,7 +42,7 @@ def test_energy(example):
     """
     Tests if computed energies match the reference energy eigenvalues. It is
     required that input file schrodinger.inp is in same directory as the
-    reference file.
+    reference file (Here: application_examples).
     """
     path = "./application_examples/{}/".format(example)
     ref_energy = np.loadtxt(path + "energy.ref")
@@ -49,9 +50,9 @@ def test_energy(example):
     intfunc = modules.interpolator.interpolator(parameter['x_decl'],
                                                 parameter['y_decl'],
                                                 parameter['interpol_method'])
-    energy_test = modules.solver.solv(parameter['xMin'],
+    comp_energy = modules.solver.solv(parameter['xMin'],
                                       parameter['xMax'],
                                       parameter['nPoint'],
                                       parameter['mass'],
                                       intfunc)[0][parameter['first']-1:parameter['last']]
-    np.allclose(ref_energy, energy_test)
+    np.allclose(ref_energy, comp_energy)
