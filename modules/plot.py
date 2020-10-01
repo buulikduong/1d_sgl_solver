@@ -65,18 +65,23 @@ def plotqm(x_val, potential, eigenfunctions, energies, exp_values, lim_x=None,
     plt.plot(x_val, potential, color="black")
 
     # adjusting x and y axis
-    if lim_x is None:
+    if lim_x is not None:
+        xmin, xmax = lim_x
+        extraspace = np.abs(xmax * 0.05 * pref_space)
+        xmin = np.abs(xmin) - extraspace
+        xmax = np.abs(xmax) + extraspace
+        lim_x = (xmin, xmax)
+        plt.xlim(lim_x)
         extraspace = np.abs(np.amax(x_val) * 0.05 * pref_space)
         x_min = np.amin(x_val) - extraspace
         x_max = np.amax(x_val) + extraspace
         lim_x = (x_min, x_max)
         plt.xlim(lim_x)
     else:
-        xmin, xmax = lim_x
-        extraspace = np.abs(xmax * 0.05 * pref_space)
-        xmin = np.abs(xmin) - extraspace
-        xmax = np.abs(xmax) + extraspace
-        lim_x = (xmin, xmax)
+        extraspace = np.abs(np.amax(x_val) * 0.05 * pref_space)
+        x_min = np.amin(x_val) - extraspace
+        x_max = np.amax(x_val) + extraspace
+        lim_x = (x_min, x_max)
         plt.xlim(lim_x)
 
     if lim_y is None:
