@@ -26,3 +26,5 @@ def interpolator(x_sup, y_sup, method):
     elif method == "cspline":
         intfunc = CubicSpline(x_sup, y_sup, bc_type="natural")
         return intfunc
+
+    return None

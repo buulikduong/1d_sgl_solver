@@ -13,7 +13,7 @@ def read_inp(path):
         path (string): path to the input file.
 
     Returns:
-        data (dictionary): all parameter from the input file. Parameters are:
+        data (dictionary): all parameters from the input file. Parameters are:
         mass, xMin, xMax, nPoint, first, last, interpol_method, interpol_num,
         x_decl and y_decl
     """

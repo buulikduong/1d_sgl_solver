@@ -54,5 +54,7 @@ def test_energy(example):
                                       parameter['xMax'],
                                       parameter['nPoint'],
                                       parameter['mass'],
-                                      intfunc)[0][parameter['first']-1:parameter['last']]
+                                      intfunc,
+                                      parameter['first'],
+                                      parameter['last'])[0]
     np.allclose(ref_energy, comp_energy)

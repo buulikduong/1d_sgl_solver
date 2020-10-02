@@ -103,9 +103,9 @@ def plotqm(x_val, potential, eigenfunctions, energies, exp_values, lim_x=None,
         # eigenvalue to plot is close to zero. For this exception a higher
         # factor (here: 2.50) is used instead.
         if np.abs(energies[-1]) < 0.2:
-            y_max = energies[-1] * 2.5 + (np.amax(eigenfunctions[:, eigenmax])) * scalfac
+            y_max = energies[-1] * 2.5 + (np.amax(eigenfunctions[:, eigenmax - 1])) * scalfac
         else:
-            y_max = energies[-1] * 1.05 + (np.amax(eigenfunctions[:, eigenmax])) * scalfac
+            y_max = energies[-1] * 1.05 + (np.amax(eigenfunctions[:, eigenmax - 1])) * scalfac
         lim_y = (y_min, y_max)
         plt.ylim(lim_y)
     else:
@@ -113,7 +113,7 @@ def plotqm(x_val, potential, eigenfunctions, energies, exp_values, lim_x=None,
 
     for ii in range(eigenmin - 1, eigenmax):
 
-        # plotting eigenfunctions in oscillating colours
+        # plotting eigenfunctions with oscillating colours
         if ii % 2:
             color = "red"
         if not ii % 2:
@@ -149,6 +149,7 @@ def plotuncertainty(potential, eigenfunctions, energies, uncertainties,
 
     plt.plot(uncertainties, energies, "+", color="magenta", markersize=14, mew=2)
 
+    # additional factor for x_max for better visualization of last point
     if unclim_x is None:
         x_min = 0
         x_max = np.amax(uncertainties) * 1.05
@@ -164,9 +165,9 @@ def plotuncertainty(potential, eigenfunctions, energies, uncertainties,
         else:
             y_min = np.amin(potential) * 1.1
         if np.abs(energies[-1]) < 0.2:
-            y_max = energies[-1] * 2.5 + (np.amax(eigenfunctions[:, eigenmax])) * scalfac
+            y_max = energies[-1] * 2.5 + (np.amax(eigenfunctions[:, eigenmax - 1])) * scalfac
         else:
-            y_max = energies[-1] * 1.05 + (np.amax(eigenfunctions[:, eigenmax])) * scalfac
+            y_max = energies[-1] * 1.05 + (np.amax(eigenfunctions[:, eigenmax - 1])) * scalfac
         lim_y = (y_min, y_max)
         plt.ylim(lim_y)
     else:
