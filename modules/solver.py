@@ -9,7 +9,7 @@ from scipy import linalg
 from scipy import sparse
 
 
-def solv(xmin, xmax, npoint, mass, potential):
+def solv(xmin, xmax, npoint, mass, potential, first, last):
     """
     Routine for solving stationary Schroedinger equation
     in tridiagonal maxtrix form for a given potential.
@@ -36,8 +36,7 @@ def solv(xmin, xmax, npoint, mass, potential):
     tridiagonal = sparse.spdiags(diags, positions, npoint, npoint).toarray()
 
     # solving tridiagonal matrix
-    eigen_val, eigen_vec = linalg.eigh(tridiagonal)
-
+    eigen_val, eigen_vec = linalg.eigh(tridiagonal, eigvals=(first - 1, last - 1))
     return eigen_val, eigen_vec, x_points
 
 
@@ -65,9 +64,9 @@ def norm(eigenvectors, xmin, xmax, npoint):
 
 
 def exp_val(w_func, xmin, xmax, npoint):
-    """
-    Routine for calculating expectation values :math:`\Delta x` and
-    position uncertainty :math:`\sigma`.
+    r"""
+    Routine for calculating expectation values $\Delta x$ and
+    position uncertainty $\sigma$.
 
         Args:
             w_func (array): normalized eigenvectors.
