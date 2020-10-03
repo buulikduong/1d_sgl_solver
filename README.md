@@ -27,12 +27,15 @@ linear          # interpolation type
 -2.0 0.0
  2.0 0.0
 ```
+It is necessary that all physical quantities are given in atomic units.
+The unit of the energy will be Hartree and the unit for the lenght will be
+calculated in Bohr.
 
 For showing the help page with the description of the script and its arguments,
 please enter following line into your unix shell:
 
 ```bash
-python3 main_solver.py -h
+python3 main_solver -h
 ```
 
 For visualizing the saved output data, please execute the script `main_plot`
